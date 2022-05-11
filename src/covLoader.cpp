@@ -354,7 +354,7 @@ int covLoader::getBamType(bam1_t *b){
 			c = bam_get_cigar(b);  // CIGAR
 			op = bam_cigar_op(c[i]);
 			if(op == BAM_CMATCH){
-				cout<<"there are MD flag and MATCH in the bamfile"<<endl;
+				// cout<<"there are MD flag and MATCH in the bamfile"<<endl;
 				return BAM_CIGAR_NO_DIFF_MD;
 			}
 		}
@@ -362,7 +362,7 @@ int covLoader::getBamType(bam1_t *b){
 			c = bam_get_cigar(b);  // CIGAR
 			op = bam_cigar_op(c[i]);
 			if(op == BAM_CEQUAL || op == BAM_CDIFF){
-				cout<<"there are MD flag and DIFF in the bamfile"<<endl;
+				// cout<<"there are MD flag and DIFF in the bamfile"<<endl;
 				return BAM_CIGAR_DIFF_MD;
 			}
 		}
@@ -371,7 +371,7 @@ int covLoader::getBamType(bam1_t *b){
 			c = bam_get_cigar(b);  // CIGAR
 			op = bam_cigar_op(c[i]);
 			if(op == BAM_CMATCH){
-				cout<<"there is not MD flag but having MATCH in the bamfile"<<endl;
+				// cout<<"there is not MD flag but having MATCH in the bamfile"<<endl;
 				return BAM_CIGAR_NO_DIFF_NO_MD;
 			}
 		}
@@ -379,7 +379,7 @@ int covLoader::getBamType(bam1_t *b){
 			c = bam_get_cigar(b);  // CIGAR
 			op = bam_cigar_op(c[i]);
 			if(op == BAM_CEQUAL || op == BAM_CDIFF){
-				cout<<"there is not MD flag but having DIFFH in the bamfile"<<endl;
+				// cout<<"there is not MD flag but having DIFFH in the bamfile"<<endl;
 				return BAM_CIGAR_DIFF_NO_MD;
 			}
 		}

@@ -98,7 +98,7 @@ void Evaluate::getinregion(string filename){
 	}
 	string buf;
 	getline(file, buf);
-	getline(file, buf);		//20220510去掉头部信息
+	getline(file, buf);		//20220510 get rid of titleline
 	while(buf.size()){
 		inregions.push_back(buf);
 		getline(file, buf);
@@ -213,7 +213,7 @@ int Evaluate::loadAlnData(){
 	isize.estInsertSize(meaninsertsize, sdev);
 	mininsertsize = meaninsertsize-IsizeSdevFold*sdev;
 	maxinsertsize = meaninsertsize+IsizeSdevFold*sdev;
-	// cout << "meaninsertsize: " << meaninsertsize << endl << "sdev: " << sdev << endl << "################ mininsertsize: " << mininsertsize << endl << "################ maxinsertsize: " << maxinsertsize << endl << endl;
+
 	return 0;
 }
 
@@ -239,20 +239,20 @@ void Evaluate::getreadsMarkregion(region r){
 
 	for(uint64_t i=0; i<alnDataVec.size(); i++){
 		if(isabstrandRead(alnDataVec.at(i))){
-			for(int64_t j = max(alnDataVec[i]->core.pos + 1, int64_t(r.startPos)); j <= min((alnDataVec[i]->core.pos + alnDataVec[i]->core.l_qseq+1), int64_t(r.endPos)); j++){  //0-based to 1-based needed +1
+			for(int64_t j = max((int64_t)(alnDataVec[i]->core.pos + 1), (int64_t)r.startPos); j <= min((int64_t)(alnDataVec[i]->core.pos + alnDataVec[i]->core.l_qseq + 1), (int64_t)r.endPos); j++){  //0-based to 1-based needed +1
 				basearr[j-r.startPos].coverage.num_reads[1]++;
 			}
 		}
 		if(alnDataVec[i]->core.tid==alnDataVec[i]->core.mtid){
 
 			if(!((abs(alnDataVec[i]->core.isize) > mininsertsize) and (abs(alnDataVec[i]->core.isize) < maxinsertsize))){
-				for(int64_t j = max(alnDataVec[i]->core.pos + 1, int64_t(r.startPos)); j <= min((alnDataVec[i]->core.pos+alnDataVec[i]->core.l_qseq + 1), int64_t(r.endPos)); j++){
+				for(int64_t j = max((int64_t)(alnDataVec[i]->core.pos + 1), (int64_t)r.startPos); j <= min((int64_t)(alnDataVec[i]->core.pos+alnDataVec[i]->core.l_qseq + 1), (int64_t)r.endPos); j++){
 					basearr[j-r.startPos].coverage.num_reads[2]++;
 				}
 			}
 		}else{
 
-			for(int64_t j = max(alnDataVec[i]->core.pos + 1, int64_t(r.startPos));j <= min((alnDataVec[i]->core.pos + alnDataVec[i]->core.l_qseq + 1), int64_t(r.endPos)); j++){
+			for(int64_t j = max((int64_t)(alnDataVec[i]->core.pos + 1), (int64_t)r.startPos);j <= min((int64_t)(alnDataVec[i]->core.pos + alnDataVec[i]->core.l_qseq + 1), (int64_t)(r.endPos)); j++){
 				basearr[j-r.startPos].coverage.num_reads[0]++;
 			}			
 		}
@@ -337,11 +337,11 @@ double* Evaluate::getabreadsreatio(region r){
 	double *score = new double[3];
 	double mttmp = 0, sttmp = 0, istmp = 0;
 	int markMeancov;
-	//计算abmate
+	//caculate abmate
 	for (size_t i = 0; i < abmate.size(); i++)
 	{
 		int count = 0, sum = 0;
-		//判断覆盖度是否满足条件
+		//judge whether coverage is too low
 		for (int64_t j = abmate.at(i).startPos; j < abmate.at(i).endPos; j++)
 		{
 			sum = basearr[j - r.startPos].coverage.num_bases[5] + sum;
@@ -349,7 +349,7 @@ double* Evaluate::getabreadsreatio(region r){
 		}
 		markMeancov = sum/count;
 		if (markMeancov < mincov) break;								
-		//计算对应标记区间得分
+		//caculate score
 		int rToal = 0, rAb = 0;
 		for (size_t k = 0; k < alnDataVec.size(); k++)
 		{
@@ -357,18 +357,18 @@ double* Evaluate::getabreadsreatio(region r){
 			(alnDataVec.at(k)->core.pos < abmate.at(i).endPos and (abmate.at(i).endPos < (alnDataVec.at(k)->core.pos+alnDataVec.at(k)->core.l_qseq)))){
 				rToal++;
 				if(alnDataVec[k]->core.tid != alnDataVec[k]->core.mtid) 
-				rAb++;//判断是否为abmateread
+				rAb++;//judge whether read is abmate
 			}
 		}
 		if(mttmp < double(rAb)/rToal) mttmp = double(rAb)/rToal;
 	}
 	score[0] = mttmp;
 
-	//计算abstrand
+	//caculate abstrand
 	for (size_t i = 0; i < abstrand.size(); i++)
 	{
 		int count = 0,sum = 0;
-		//判断覆盖度是否满足条件
+		//judge whether coverage is too low
 		for (int64_t j = abstrand.at(i).startPos; j < abstrand.at(i).endPos; j++)
 		{
 			sum = basearr[j - r.startPos].coverage.num_bases[5] + sum;
@@ -376,7 +376,7 @@ double* Evaluate::getabreadsreatio(region r){
 		}
 		markMeancov = sum/count;
 		if (markMeancov < mincov) break;								
-		//计算对应标记区间得分
+		//caculate score
 		int rToal = 0, rAb = 0;
 		for (size_t k = 0; k < alnDataVec.size(); k++)
 		{
@@ -384,18 +384,18 @@ double* Evaluate::getabreadsreatio(region r){
 			(alnDataVec.at(k)->core.pos < abstrand.at(i).endPos and (abstrand.at(i).endPos < (alnDataVec.at(k)->core.pos + alnDataVec.at(k)->core.l_qseq)))){
 				rToal++;
 				if(isabstrandRead(alnDataVec.at(k))) 
-				rAb++;//判断是否为abstrandread
+				rAb++;//judge whether read is abstrandread
 			}
 		}
 		if(sttmp < double(rAb)/rToal) sttmp = double(rAb)/rToal;
 	}
 	score[1] = sttmp;
 
-	//计算abisize
+	//caculate abisize
 	for (size_t i = 0; i < abisize.size(); i++)
 	{
 		int count = 0,sum = 0;
-		//判断覆盖度是否满足条件
+		//judge whether coverage is too low
 		for (int64_t j = abisize.at(i).startPos; j < abisize.at(i).endPos; j++)
 		{
 			sum = basearr[j - r.startPos].coverage.num_bases[5] + sum;
@@ -403,7 +403,7 @@ double* Evaluate::getabreadsreatio(region r){
 		}
 		markMeancov = sum/count;
 		if (markMeancov < mincov) break;								
-		//计算对应标记区间得分
+		//caculate score
 		int rToal = 0, rAb = 0;
 		for (size_t k = 0; k < alnDataVec.size(); k++)
 		{
@@ -411,7 +411,7 @@ double* Evaluate::getabreadsreatio(region r){
 			(alnDataVec.at(k)->core.pos < abisize.at(i).endPos and (abisize.at(i).endPos < (alnDataVec.at(k)->core.pos + alnDataVec.at(k)->core.l_qseq)))){
 				rToal++;
 				if(!((abs(alnDataVec[k]->core.isize) > mininsertsize) and (abs(alnDataVec[k]->core.isize) < maxinsertsize))) 
-				rAb++;//判断是否为abisize
+				rAb++;//judge whether read is abisize
 			}
 		}
 		if(istmp < double(rAb)/rToal) istmp = double(rAb)/rToal;

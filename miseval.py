@@ -4,59 +4,60 @@ import os
 import sys
 import time
 def printHelp():
-    print("""Program: miseval v0.3.0
+    print("""Program: miseval
+Version: 0.4.0
 
-    Usage:  miseval.py [options] -r <REF> -b <BAM> -r <REG>
+Usage:  miseval.py [options] -r <REF> -b <BAM> -r <REG>
 
-    Description:
-        REF     Reference file (required)
-        BAM     Coordinate-sorted BAM file (required)
-        REG     Regions to be analyzed: CHR|CHR:START-END.(required)
-    Inputs:
-        -r PATH        reference file
-        -b PATH        bam file
-        -f PATH        regions file
-    General:
-        -min-regsize INT    [200]
-            the evaluated region will be extended to INT bp symmetrically 
-            when it is shorter than INT bp. 
-        -extend-regsize-fold    FLOAT   [2]
-            auxiliary region is used to set baseline for an evaluated region, 
-            it is determined by extending the evaluated region by 
-            FLOAT*(the evaluated region size) on both sides. 
+Description:
+    REF     Reference file (required)
+    BAM     Coordinate-sorted BAM file (required)
+    REG     Regions to be analyzed: CHR|CHR:START-END.(required)
 
-    Mode: 
-        -cov    on/off    coverage clustering   [on]
-            --min-cov-fold  FLOAT   [0.5]
-                the coverage is anomalous when it is lower than FLOAT*meancov,
-                 where meancov is the average coverage of auxiliary region.
-            --max-cov-fold  FOLAT   [2]
-                the coverage is anomalous when it is higher than FLOAT*meancov.
-        -indels on/off   indels clustering      [on]
-            --min-locs-ratio    FLOAT   [0.2]
-                mask the ultra-low coverage locations whose coverage is lower 
-                than FLOAT*meancov. when indels appear at ultra-low coverage,
-                the performance on indels is unreliable.
-        -abstrand   on/off   anomalous orientation reads clustering     [0.2]
-            --min-abstrand-ratio    FLOAT   [0.3]
-                search the anomalous orientation clumps in which the anomalous 
-                orientation reads take a higher ratio than FLOAT at each location.
-        -abisize    on/off    anomalous insertsize reads clustering     [on]
-            --min-abisize-ratio     FLOAT   [0.3]
-                search the anomalous insertsize clumps in which the anomalous 
-                insertsize reads take a higher ratio than FLOAT at each location.
-            --isize-sdev-fold FLOAT     [3]
-                the anomalous insertsize is short than (the average insertsize)-FLOAT*sdev bp 
-                or longer than  (the average insertsize)+FLOAT*sdev bp, otherwise it is anomalous.
-        -abmate     on/off   chromosomal rearrangement reads clustering     [on]
-            --min-abmate-ratio  FLOAT   [0.3]
-                search the chromosomal rearrangement clumps in which the chromosomal 
-                rearrangement reads take a higher ratio than FLOAT at each location.
+Inputs:
+    -r PATH    Reference file
+    -b PATH    Bam file
+    -f PATH    Regions file
+General:
+    -min-regsize INT [200]
+        the evaluated region will be extended to INT bp symmetrically 
+        when it is shorter than INT bp. 
+    -extend-regsize-fold FLOAT [2]
+        auxiliary region is used to set baseline for an evaluated region, 
+        it is determined by extending the evaluated region by 
+        FLOAT*(the evaluated region size) on both sides. 
+
+Mode: 
+    -cov on/off coverage clustering [on]
+        --min-cov-fold FLOAT [0.5]
+            the coverage is anomalous when it is lower than FLOAT*meancov,
+            where meancov is the average coverage of auxiliary region.
+        --max-cov-fold FOLAT [2]
+            the coverage is anomalous when it is higher than FLOAT*meancov.
+    -indels on/off indels clustering [on]
+        --min-locs-ratio FLOAT [0.2]
+            mask the ultra-low coverage locations whose coverage is lower 
+            than FLOAT*meancov. When indels appear at ultra-low coverage location,
+            the performance on indels is unreliable.
+    -abstrand on/off anomalous orientation reads clustering [0.2]
+        --min-abstrand-ratio FLOAT [0.3]
+            search the anomalous orientation clumps in which the anomalous 
+            orientation reads take a higher ratio than FLOAT at each location.
+    -abisize on/off anomalous insertsize reads clustering [on]
+        --min-abisize-ratio FLOAT [0.3]
+            search the anomalous insertsize clumps in which the anomalous 
+            insertsize reads take a higher ratio than FLOAT at each location.
+        --isize-sdev-fold FLOAT [3]
+            the anomalous insertsize is short than (average_isize)-FLOAT*sdev bp 
+            or longer than (average_isize)+FLOAT*sdev bp, otherwise it is anomalous.
+    -abmate on/off chromosomal rearrangement reads clustering [on]
+        --min-abmate-ratio FLOAT [0.3]
+            search the chromosomal rearrangement clumps in which the chromosomal 
+            rearrangement reads take a higher ratio than FLOAT at each location.
    
-    Options:
-        -o PATH             outdir
-        -h                  show this help message and exit
-    """)
+Options:
+    -o PATH    Outdir
+    -h         Show this help message and exit""")
     exit()
 
 def clusterall():
@@ -82,7 +83,7 @@ def format(i):
         # print(itmp)
         fvec.append(itmp)
     for j in fvec:
-        if (j[0] > fvec[0][0] and j[1] < fvec[0][1]):
+        if ((j[0] > fvec[0][0] and j[1] < fvec[0][1]) or (j[0] < fvec[0][0] and j[1] > fvec[0][1])):
             flag = 1
             break
     if (flag==1):
@@ -174,14 +175,14 @@ try:
 
     if(sys.argv.count('-o')):
         outdir = sys.argv[sys.argv.index('-o')+1]
-    cmd = 'miseval {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17}'.format(reFile, bamFile, regFile, minRegsize, exRegFold, cov, minCovFold, maxCovFold, indel, minLocRatio, abstrand, minStrandRatio, abIsize, minisizeRatio, IsizeSdevFold, abMate, minMateRatio, outdir)
+    cmd = './bin/miseval_bin {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17}'.format(reFile, bamFile, regFile, minRegsize, exRegFold, cov, minCovFold, maxCovFold, indel, minLocRatio, abstrand, minStrandRatio, abIsize, minisizeRatio, IsizeSdevFold, abMate, minMateRatio, outdir)
     print(cmd)
     os.system(cmd)
     os.chdir(outdir)
     clusterall()
     os.chdir('result')
 #file analysis
-    with open('../../{}'.format(regFile), 'r') as reg:
+    with open(regFile, 'r') as reg:
         regions = reg.read().splitlines()
     del(regions[0])
     f = open('clusterResult',mode='w')
@@ -330,5 +331,5 @@ The normal regions are saved in {2}/result/normalRegion.""".format(outdir, outdi
     end = time.time()
     print('\nRunning time: %s seconds'%(end-start))
 except ValueError:
-    print("invalid value")
+    print("ValueError line:",ValueError.__traceback__.tb_lineno)
     printHelp()

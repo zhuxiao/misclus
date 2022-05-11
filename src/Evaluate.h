@@ -1,4 +1,5 @@
-#include <stdlib.h>
+#include <iostream>
+#include <cstring>
 #include <random>
 #include <fstream>
 #include <numeric>
@@ -45,11 +46,11 @@ class Evaluate{
 		string outdir = "misEval_out";
 
 		Paras *paras;
-		vector<indicators> scores;//指标[0...5]覆盖度，indel，clip，insertsize，reversed，聚集程度
+		vector<indicators> scores;//indicator[0...5]coverage，indel，clip，insertsize，reversed，mate
 		vector<kind> result;
 		vector<string> inregions;
-		vector<region> evaregions, regions, chrregions, ranregion, fairegion;//检测区间，扩展的检测区间，合并的检测区间，随机区间，染色体区间
-		vector<region> abmate, abstrand, abisize;//标记区间
+		vector<region> evaregions, regions, chrregions, ranregion, fairegion;//evaluated region，auxiliary region，merged region，ranregion，chromosal region
+		vector<region> abmate, abstrand, abisize;//mark clump
 		faidx_t * fai;
 		vector<Base*> baseArr;
 		Base* basearr;
@@ -76,7 +77,7 @@ class Evaluate{
 		void preData(region r);
 		void clearData();
 		double *abnormalreads(region r);
-		double* getabreadsreatio(region r);//计算标记区间分数
+		double* getabreadsreatio(region r);//caculate indicators in region
 		void getindicator(int s);
 		void extracfeature();
 		void outputfile();
