@@ -46,9 +46,9 @@ Then, the assembly error regions and normal regions will be output in `misassemb
 The help information can be shown:
 ```sh
 Program: miseval
-Version: 0.4.0
+Version: 0.4.1
 
-Usage:  miseval.py [options] -r <REF> -b <BAM> -r <REG>
+Usage:  miseval.py [options] -r <REF> -b <BAM> -f <REG>
 
 Description:
     REF     Reference file (required)

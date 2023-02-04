@@ -5,9 +5,9 @@ import sys
 import time
 def printHelp():
     print("""Program: miseval
-Version: 0.4.0
+Version: 0.4.1
 
-Usage:  miseval.py [options] -r <REF> -b <BAM> -r <REG>
+Usage:  miseval.py [options] -r <REF> -b <BAM> -f <REG>
 
 Description:
     REF     Reference file (required)
@@ -131,7 +131,7 @@ try:
     if(sys.argv.count('-h')):
         printHelp()
 
-#region
+# #region
     if(sys.argv.count('-min-regsize')):
         minRegsize = int(sys.argv[sys.argv.index('-min-regsize')+1])
     if(sys.argv.count('-extend-regsize-fold')):

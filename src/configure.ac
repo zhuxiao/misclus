@@ -23,7 +23,7 @@ AC_CHECK_LIB([pthread], [main],[],[echo "you need to have libpthread around"])
 
 LT_INIT
 
-AM_INIT_AUTOMAKE
+
 AC_PROG_LIBTOOL
 AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
