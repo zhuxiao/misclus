@@ -2,12 +2,12 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([misEval], [0.1.0], [1668191303@qq.com])
+AC_INIT([misClas], [0.1.0], [1668191303@qq.com])
 AM_INIT_AUTOMAKE([-Wportability])
 AC_CONFIG_SRCDIR([Paras.cpp])
 AC_CONFIG_HEADERS([config.h])
 
-AC_CHECK_HEADER(miseval/util.h)
+AC_CHECK_HEADER(misclas/util.h)
 AC_CONFIG_MACRO_DIRS([m4])
 
 # Checks for programs.

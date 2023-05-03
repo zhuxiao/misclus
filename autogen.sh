@@ -9,6 +9,6 @@
 	autoconf
 	./configure
 	make
-	mv -f miseval_bin ../bin
+	mv -f misclas_bin ../bin
 	cd ../
 	

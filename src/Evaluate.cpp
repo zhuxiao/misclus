@@ -69,6 +69,12 @@ Evaluate::Evaluate(char** argv,faidx_t *fai,Paras *paras){
 	if(!(strcmp(argv[18],"misEval_out")==0)){
 		outdir = argv[18];
 	}
+
+	if(!(strcmp(argv[19],"0.2")==0)){
+		randomCoef = atof(argv[19]);
+	}	
+	cout << "NumNormalRegCoef: " << randomCoef << endl;	
+
 	getinregion(regionfile);
 	getchrregions(fainame);
 	getranregion();
@@ -178,21 +184,59 @@ void Evaluate::getchrregions(string fai){
 	}
 }
 
+bool Evaluate::compareContigLen(region a,region b){
+	return a.endPos > b.endPos;
+}
+
+bool Evaluate::isRegExist(region reg, vector <region> vec){
+	for(uint64_t i=0; i<vec.size();i++){
+		if (reg.chrname==vec.at(i).chrname and ((vec.at(i).startPos<reg.endPos and reg.endPos<vec.at(i).endPos) or (reg.startPos<vec.at(i).endPos and vec.at(i).endPos<reg.endPos)))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void Evaluate::getranregion(){
 	region tmp;
-	int len = evaregions.at(0).endPos - evaregions.at(0).startPos + 1;
-	double one = 1;
-	for(uint64_t i=0; i<chrregions.size(); i++){
-		tmp.chrname = chrregions[i].chrname;
-		tmp.startPos = max(one, (chrregions[i].startPos+chrregions[i].endPos)/2 - 2.5*len);
-		tmp.endPos = (chrregions[i].startPos+chrregions[i].endPos)/2 + 2.5*len;
-		tmp.num = i;
-		regions.push_back(tmp);
-		tmp.startPos = max(one, (chrregions[i].startPos+chrregions[i].endPos)/2 - 0.5*len);
-		tmp.endPos = (chrregions[i].startPos+chrregions[i].endPos)/2 + len/2;
-		evaregions.push_back(tmp);
+	int len = evaregions.at(0).endPos - evaregions.at(0).startPos + 1, randomFai;
+	int randomNum = int(randomCoef*regions.size());
+	long one = 1;
+	vector <region> v1;
+	v1 = fairegion;
+	sort(v1.begin(),v1.end(),compareContigLen);
+	srand(time(NULL));
 
-	}
+	for(int i=0;i<randomNum;){
+        
+        
+        randomFai = (rand()% (int(0.2*v1.size())));
+        tmp.chrname=v1.at(randomFai).chrname;
+        tmp.startPos = (rand() % (v1.at(randomFai).endPos-20400));
+        tmp.endPos=tmp.startPos+len;
+        if (isRegExist(tmp,regions)) continue;
+        regions.push_back(tmp);
+		long evaStart = tmp.startPos-2*len;
+		long evaEnd = tmp.endPos+2*len;
+
+		tmp.startPos = max(one, evaStart);
+		tmp.endPos = min(evaEnd,v1.at(randomFai).endPos);
+		evaregions.push_back(tmp);
+        i++;
+    }
+	
+	// for(uint64_t i=0; i<chrregions.size(); i++){
+	// 	tmp.chrname = chrregions[i].chrname;
+	// 	tmp.startPos = max(one, (chrregions[i].startPos+chrregions[i].endPos)/2 - 2.5*len);
+	// 	tmp.endPos = (chrregions[i].startPos+chrregions[i].endPos)/2 + 2.5*len;
+	// 	tmp.num = i;
+	// 	regions.push_back(tmp);
+	// 	tmp.startPos = max(one, (chrregions[i].startPos+chrregions[i].endPos)/2 - 0.5*len);
+	// 	tmp.endPos = (chrregions[i].startPos+chrregions[i].endPos)/2 + len/2;
+	// 	evaregions.push_back(tmp);
+
+	// }
 	regions.shrink_to_fit();
 	evaregions.shrink_to_fit();
 }
@@ -214,6 +258,7 @@ int Evaluate::loadAlnData(){
 	mininsertsize = meaninsertsize-IsizeSdevFold*sdev;
 	maxinsertsize = meaninsertsize+IsizeSdevFold*sdev;
 
+	cout << "minisize: " << mininsertsize << "\tmaxisize: " << maxinsertsize << endl;
 	return 0;
 }
 
@@ -238,6 +283,7 @@ bool Evaluate::isabstrandRead(bam1_t *b){
 void Evaluate::getreadsMarkregion(region r){
 
 	for(uint64_t i=0; i<alnDataVec.size(); i++){
+
 		if(isabstrandRead(alnDataVec.at(i))){
 			for(int64_t j = max((int64_t)(alnDataVec[i]->core.pos + 1), (int64_t)r.startPos); j <= min((int64_t)(alnDataVec[i]->core.pos + alnDataVec[i]->core.l_qseq + 1), (int64_t)r.endPos); j++){  //0-based to 1-based needed +1
 				basearr[j-r.startPos].coverage.num_reads[1]++;
@@ -314,6 +360,20 @@ region sttmp, istmp, mttmp;
 	}
 }
 
+void Evaluate::getMultiReads(region r){
+	int64_t chimericNum = 0;
+	for(uint64_t i=0; i<alnDataVec.size(); i++){
+		if((alnDataVec.at(i)->core.flag & BAM_FSUPPLEMENTARY)) chimericNum++;
+		if((alnDataVec.at(i)->core.flag & BAM_FSECONDARY)){
+			for(int64_t j = max((int64_t)(alnDataVec[i]->core.pos + 1), (int64_t)r.startPos); j <= min((int64_t)(alnDataVec[i]->core.pos + alnDataVec[i]->core.l_qseq + 1), (int64_t)r.endPos); j++){
+				basearr[j-r.startPos].coverage.num_multiReads++;
+			}
+		}
+
+	}
+	chimeriCoef = double(chimericNum)/alnDataVec.size();
+}
+
 void Evaluate::preData(region r){
 	covLoader cov_loader(r.chrname, r.startPos, r.endPos, fai);
 	basearr = cov_loader.initBaseArray();
@@ -321,6 +381,8 @@ void Evaluate::preData(region r){
 	data_loader.loadAlnData(alnDataVec);
 	cov_loader.generateBaseCoverage(basearr, alnDataVec);
 	getreadsMarkregion(r);
+	getMultiReads(r);
+
 }
 
 void Evaluate::clearData(){
@@ -330,6 +392,7 @@ void Evaluate::clearData(){
 	vector<region>().swap(abisize);
 	vector<region>().swap(abmate);
 	vector<region>().swap(abstrand);
+	chimeriCoef = 1;
 }
 
 
@@ -453,7 +516,7 @@ void Evaluate::getindicator(int s){
 		if(basearr[i-regions.at(s).startPos].coverage.idx_RefBase < 4){
 			basecov = basearr[i-regions.at(s).startPos].coverage.num_bases[5];
 			nindel = basearr[i-regions.at(s).startPos].insVector.size() + basearr[i-regions.at(s).startPos].del_num_from_del_vec;
-			if(basecov < mincov or basecov>maxcov){
+			if(basecov < mincov or (basecov - 0.5*basearr[i-regions.at(s).startPos].coverage.num_multiReads)>maxcov){
 				covscore += 1;
 			}
 		}else{
@@ -462,7 +525,7 @@ void Evaluate::getindicator(int s){
 	}
 	abReadsRatio = getabreadsreatio(regions.at(s));
 	if(blankregion < (evaregions.at(s).endPos - evaregions.at(s).startPos+1)){
-		tmp.covscore[0] = (covscore)/(evaregions.at(s).endPos - evaregions.at(s).startPos-blankregion+1);
+		tmp.covscore[0] = chimeriCoef*(covscore)/(evaregions.at(s).endPos - evaregions.at(s).startPos-blankregion+1);
 	}else{
 		tmp.covscore[0] = 0;
 	}

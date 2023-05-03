@@ -57,7 +57,7 @@ class Evaluate{
 		vector<vector<bam1_t*>> alnDataVector;
 		vector<bam1_t*> alnDataVec;
 		vector<vector<int>> abnormalpos;
-		double meaninsertsize, mininsertsize, maxinsertsize, meancov, mincov, maxcov;
+		double meaninsertsize, mininsertsize, maxinsertsize, meancov, mincov, maxcov,chimeriCoef=1, randomCoef = 0.2;
 		string regionfile, bamFile;
 
 		
@@ -68,12 +68,15 @@ class Evaluate{
 		void splitstring(string origin, char flag, string &front, string &after);
 		void getchrregions();
 		void getchrregions(string fai);
+		static bool compareContigLen(region a,region b);
+		bool isRegExist(region reg, vector <region> vec);
 		void getranregion();
 		vector<Base*> initbaseinfo();
 		Base* initBaseinfo(region r);
 		int loadAlnData();
 		bool isabstrandRead(bam1_t *b);
 		void getreadsMarkregion(region r);
+		void getMultiReads(region r);
 		void preData(region r);
 		void clearData();
 		double *abnormalreads(region r);

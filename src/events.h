@@ -32,6 +32,7 @@ typedef struct
 	int16_t num_max;  // the maximal base index and the corresponding base count
 	char refBase; // A, C, G, T, N(A+C+G+T), M(A+C), R(A+G), S(C+G), V(A+C+G), W(A+T), Y(C+T), H(A+C+T), K(G+T), D(A+G+T), B(C+G+T), ACMGRSVTWYHKDBN
 	uint16_t num_reads[3]={0,0,0};//abnormalmate,abnormalstrand,abnormalisize
+	uint16_t num_multiReads; //multiple alignment reads
 }baseCoverage_t;
 
 typedef struct{
