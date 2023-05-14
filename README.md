@@ -51,7 +51,7 @@ Version: 0.4.1
 Usage:  misclas.py [options] -r <REF> -b <BAM> -f <REG>
 
 Description:
-    REF     Reference file (required)
+    ASM     Assembled sequences file (required)
     BAM     Coordinate-sorted BAM file (required)
     REG     Regions to be analyzed: CHR|CHR:START-END.(required)
 
