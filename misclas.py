@@ -10,7 +10,7 @@ Version: 0.4.1
 Usage:  misclas.py [options] -r <REF> -b <BAM> -f <REG>
 
 Description:
-    REF     Reference file (required)
+    ASM     Assembled sequences (required)
     BAM     Coordinate-sorted BAM file (required)
     REG     Regions to be analyzed: CHR|CHR:START-END.(required)
 
@@ -188,10 +188,14 @@ try:
     os.chdir(outdir)
     clusterall()
     os.chdir('result')
+    os.chdir("../../")
+    
 #file analysis
     with open(regFile, 'r') as reg:
         regions = reg.read().splitlines()
     del(regions[0])
+    os.chdir(outdir)
+    os.chdir('result')
     f = open('clusterResult',mode='w')
     fout = open('regionClassification', mode='w')
     # num=0
