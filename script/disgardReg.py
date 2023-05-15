@@ -6,6 +6,7 @@ with open(sys.argv[2], 'r') as fai:
     scaffold = fai.read().splitlines()
 reglist = []
 scaffoldend = []
+print("#scaffold\tstartPos\tendPos")
 for i in reg:
     tmplist = i.split()
     int(tmplist[1])
@@ -21,4 +22,4 @@ for i in reglist:
             tmp = j
             break
     if(int(i[1]) > 1000 and int(i[2]) < int(j[1])-1000):
-        print(i[0],":",i[1],'-',i[2],sep='')
+        print(i[0],i[1],i[2],sep='\t')
