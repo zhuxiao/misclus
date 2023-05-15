@@ -7,7 +7,7 @@ def printHelp():
     print("""Program: misclas
 Version: 0.4.1
 
-Usage:  misclas.py [options] -r <REF> -b <BAM> -f <REG>
+Usage:  misclas.py [options] -r <ASM> -b <BAM> -f <REG>
 
 Description:
     ASM     Assembled sequences (required)
@@ -15,7 +15,7 @@ Description:
     REG     Regions to be analyzed: CHR|CHR:START-END.(required)
 
 Inputs:
-    -r PATH    Reference file
+    -r PATH    Assembled sequences file
     -b PATH    Bam file
     -f PATH    Regions file
 General:
