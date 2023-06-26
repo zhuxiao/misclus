@@ -33,8 +33,9 @@ RUN git clone https://github.com/zhuxiao/misclas.git && \
     cd misclas && \
     bash autogen.sh
 
-#RUN mv /misclas/bin/* /usr/local/bin/
+
 RUN ln -s /misclas/bin/misclas_bin /usr/local/bin/
-RUN mv /misclas/*py /usr/local/bin/
+RUN ln -s /misclas/misclas.py /usr/local/bin/
+
 # Set the entry point or run any desired command
 ENTRYPOINT ["/usr/local/bin/misclas.py"]
