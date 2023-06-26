@@ -28,14 +28,15 @@ RUN git clone https://github.com/samtools/htslib.git && \
     make && \
     make install
 
-# Download and compile misclas
-RUN git clone https://github.com/zhuxiao/misclas.git && \
-    cd misclas && \
+# Add htslib to the library path
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/htslib"
+
+# Use local misclas (to allow dev edits)
+ADD . /misclas
+RUN cd misclas && \
     bash autogen.sh
 
-
-RUN ln -s /misclas/bin/misclas_bin /usr/local/bin/
-RUN ln -s /misclas/misclas.py /usr/local/bin/
+ENV PATH="/misclas/:/misclas/bin:${PATH}"
 
 # Set the entry point or run any desired command
-ENTRYPOINT ["/usr/local/bin/misclas.py"]
+ENTRYPOINT ["/misclas/misclas.py"]
