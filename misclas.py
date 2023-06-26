@@ -111,6 +111,9 @@ minMateRatio = '0.3'
 outdir = "misClas_out"
 randomCoef = "0.2"
 
+# Get path to binary, irrespective of the current working directory
+misclas_bin_path = os.path.join(
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), "bin"), "misclas_bin")
 try:
     if(sys.argv.count('-r') and sys.argv.count('-b') and sys.argv.count('-f')):
         if not (os.path.exists(sys.argv[sys.argv.index('-r')+1])):
@@ -182,7 +185,8 @@ try:
     if(sys.argv.count('-ranNorRegCoef')):
         randomCoef = float(sys.argv[sys.argv.index('-ranNorRegCoef')+1])
 
-    cmd = './bin/misclas_bin {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17} {18}'.format(reFile, bamFile, regFile, minRegsize, exRegFold, cov, minCovFold, maxCovFold, indel, minLocRatio, abstrand, minStrandRatio, abIsize, minisizeRatio, IsizeSdevFold, abMate, minMateRatio, outdir, randomCoef)
+    
+    cmd = misclas_bin_path + ' {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17} {18}'.format(reFile, bamFile, regFile, minRegsize, exRegFold, cov, minCovFold, maxCovFold, indel, minLocRatio, abstrand, minStrandRatio, abIsize, minisizeRatio, IsizeSdevFold, abMate, minMateRatio, outdir, randomCoef)
     print(cmd)
     os.system(cmd)
     os.chdir(outdir)
