@@ -5,9 +5,9 @@ import sys
 import time
 def printHelp():
     print("""Program: misclas
-Version: 0.4.1
+Version: 0.4.2
 
-Usage:  misclas.py [options] -r <ASM> -b <BAM> -f <REG>
+Usage:  misclas [options] -r <ASM> -b <BAM> -f <REG>
 
 Description:
     ASM     Assembled sequences (required)
@@ -181,8 +181,10 @@ try:
 #NumNormalRegCoef    
     if(sys.argv.count('-ranNorRegCoef')):
         randomCoef = float(sys.argv[sys.argv.index('-ranNorRegCoef')+1])
-
-    cmd = './bin/misclas_bin {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17} {18}'.format(reFile, bamFile, regFile, minRegsize, exRegFold, cov, minCovFold, maxCovFold, indel, minLocRatio, abstrand, minStrandRatio, abIsize, minisizeRatio, IsizeSdevFold, abMate, minMateRatio, outdir, randomCoef)
+    misclasPath = "./misclas"
+    if(os.path.islink(sys.argv[0])):
+        misclasPath = os.path.dirname(os.readlink(sys.argv[0])) + "/misclas"
+    cmd = '{19} {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16} {17} {18}'.format(reFile, bamFile, regFile, minRegsize, exRegFold, cov, minCovFold, maxCovFold, indel, minLocRatio, abstrand, minStrandRatio, abIsize, minisizeRatio, IsizeSdevFold, abMate, minMateRatio, outdir, randomCoef, misclasPath)
     print(cmd)
     os.system(cmd)
     os.chdir(outdir)

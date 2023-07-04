@@ -24,7 +24,7 @@ HTSlib needs to be installed from source files.
 ```
 $ sudo yum install g++ python3 autoconf automake libtool
 ```
-HTSlib and mplack need to be installed from source files.
+HTSlib and mlpack need to be installed from source files.
 
 ## Building misClas ##
 
@@ -34,21 +34,22 @@ $ git clone https://github.com/zhuxiao/misclas.git
 $ cd misclas/
 $ ./autogen.sh
 ```
+Then, the program `misclas` will be generated in directory `misclas`.
 
 ## misClas command ##
 
 Simply，misClas can be run by the command:
 ```sh
-$ misclas.py -r referenceSequence.fa -b bamFile.bam -f regionFile
+$ misclas -r referenceSequence.fa -b bamFile.bam -f regionFile
 ```
 Then, the assembly error regions and normal regions will be output in `misassemblyRegion` file and `normalRegion` file, respectively.
 
 The help information can be shown:
 ```sh
 Program: misclas
-Version: 0.4.1
+Version: 0.4.2
 
-Usage:  misclas.py [options] -r <ASM> -b <BAM> -f <REG>
+Usage:  misclas [options] -r <ASM> -b <BAM> -f <REG>
 
 Description:
     ASM     Assembled sequences file (required)

@@ -5,10 +5,10 @@ ACLOCAL_AMFLAGS = -I m4
 CXXFLAGS=-O0 -g -Wall -fmessage-length=0 -std=c++11
 nobase_include_HEADERS=*.h
 
-bin_PROGRAMS=misclas_bin
-misclas_bin_SOURCES=alnDataLoader.cpp Base.cpp Block.cpp covLoader.cpp InsertSizeEst.cpp util_header.cpp
-misclas_bin_SOURCES+=events.cpp Paras.cpp misEval_main.cpp util.cpp RefSeqLoader.cpp Evaluate.cpp
-misclas_bin_CXXFLAGS=$(AM_CXXFLAGS)
+bin_PROGRAMS=misclas
+misclas_SOURCES=alnDataLoader.cpp Base.cpp Block.cpp covLoader.cpp InsertSizeEst.cpp util_header.cpp
+misclas_SOURCES+=events.cpp Paras.cpp misEval_main.cpp util.cpp RefSeqLoader.cpp Evaluate.cpp
+misclas_CXXFLAGS=$(AM_CXXFLAGS)
 
 ##lib_LIBRARIES=libparser.a
 ##libparser_a_SOURCES=alnDataLoader.cpp Base.cpp Block.cpp covLoader.cpp 
