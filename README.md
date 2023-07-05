@@ -44,7 +44,7 @@ $ ./autogen.sh
 ```
 Then, the program `misclas` will be generated in directory `misclas_${VERSION}`.
 
-It is recommended to create the symbolic link of the program `misclas` to the `PATH` directories in the machine.
+It is recommended to create the symbolic link of the program `misclas` to the `PATH` directories on the machine.
 
 ## misClas command ##
 
