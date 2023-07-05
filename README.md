@@ -28,13 +28,23 @@ HTSlib and mlpack need to be installed from source files.
 
 ## Building misClas ##
 
-The misclas can be builded by typing:
+misclas can be builded by typing:
 ```sh
 $ git clone https://github.com/zhuxiao/misclas.git
 $ cd misclas/
 $ ./autogen.sh
 ```
 Then, the program `misclas` will be generated in directory `misclas`.
+
+Alternatively, misclas can also be builded from released package `misclas_${VERSION}.tar.gz` from `https://github.com/zhuxiao/misclas/releases`:
+```sh
+$ tar zxvf misclas_${VERSION}.tar.gz
+$ cd misclas_${VERSION}/
+$ ./autogen.sh
+```
+Then, the program `misclas` will be generated in directory `misclas_${VERSION}`.
+
+It is recommended to create the symbolic link of the program `misclas` to the `PATH` directories in the machine.
 
 ## misClas command ##
 
@@ -102,6 +112,55 @@ Mode:
 Options:
     -o PATH    Outdir
     -h         Show this help message and exit
+```
+
+## Misassembly region extraction scripts ##
+The scripts in directory `script` can be used to extract regions used for misClas, the function of these scripts as below:
+* `extractQuastReg.py`: extract misassembly regions from the results of QUAST;
+* `filterOverlapReg.py`: filter out the overlapped regions in extracted region file;
+* `generateRandReg.py`: randomly select certain number of regions from the extracted region file;
+
+Furthermore, the extracting commands for QUAST, Misasm, Pilon, REAPR and misFiner are as below:
+
+* QUAST:
+```sh
+$ extractQUASTreg.py misassemblies_QUAST misReg_QUAST
+```
+Then, the extracted misassembly regions for QUAST will be saved in the `misReg_QUAST` file.
+
+* Misasm:
+```sh
+$ cat genome_Indel genome_Misjoin | awk '{split($1,a,":"); split(a[2],b,"-"); print a[1]"\t"b[1]"\t"b[2]}' > misReg_Misasm
+```
+Then, the extracted misassembly regions for Misasm will be saved in the `misReg_Misasm` file.
+
+* Pilon:
+```sh
+$ cat misassemblies_Pilon | grep "fix" | grep ":" | cut -d ":" -f 2,3 | awk '{split($1,a,":");split(a[2],b,"-");print a[1]"\t"b[1]"\t"b[2]}' > misReg_Pilon
+```
+
+Then, the extracted misassembly regions for Pilon will be saved in the `misReg_Pilon` file.
+
+* REAPR
+```sh
+$ cat misassemblies_REAPR | grep "Error" | awk '{print $1"\t"$4"\t"$5}' > misReg_REAPR
+```
+Then, the extracted misassembly regions for REAPR will be saved in the `misReg_REAPR` file.
+
+* misFinder
+```sh
+$ cat misassemblies_misFinder | awk '{print $1"\t"$3"\t"$4}' > misReg_misFinder
+```
+Then, the extracted misassembly regions for misFinder will be saved in the `misReg_misFinder` file.
+
+## Extracted misassembly region file format ##
+There are three fields in extracted misassembly region file: (1) name of scaffold/contig, (2) start position of the extracted misassembly region, (3) end position of the extracted misassembly region. And these fields are separated by tabulators.
+```sh
+#scaffold	startPos	endPos
+scaffold_1	43698	44050
+scaffold_3	14720	14886
+scaffold_6	171522	171824
+...
 ```
 
 ## Contact ##
