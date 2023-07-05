@@ -28,7 +28,7 @@ HTSlib and mlpack need to be installed from source files.
 
 ## Building misClas ##
 
-misclas can be built by typing:
+misClas can be built by typing:
 ```sh
 $ git clone https://github.com/zhuxiao/misclas.git
 $ cd misclas/
@@ -36,7 +36,7 @@ $ ./autogen.sh
 ```
 Then, the program `misclas` will be generated in directory `misclas`.
 
-Alternatively, misclas can also be built using the released package `misclas_${VERSION}.tar.gz` from `https://github.com/zhuxiao/misclas/releases`:
+Alternatively, misClas can also be built using the released package `misclas_${VERSION}.tar.gz` from `https://github.com/zhuxiao/misclas/releases`:
 ```sh
 $ tar zxvf misclas_${VERSION}.tar.gz
 $ cd misclas_${VERSION}/
@@ -120,7 +120,7 @@ The scripts in directory `script` can be used to extract regions used for misCla
 * `filterOverlapReg.py`: filter out the overlapped regions in extracted region file;
 * `generateRandReg.py`: randomly select certain number of regions from the extracted region file;
 
-Furthermore, the extracting commands for QUAST, Misasm, Pilon, REAPR and misFiner are as below:
+Furthermore, the extracting commands for QUAST, Misasm, Pilon, REAPR and misFinder are as below:
 
 * QUAST:
 ```sh
