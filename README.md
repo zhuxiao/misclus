@@ -28,7 +28,7 @@ HTSlib and mlpack need to be installed from source files.
 
 ## Building misClas ##
 
-misclas can be builded by typing:
+misclas can be built by typing:
 ```sh
 $ git clone https://github.com/zhuxiao/misclas.git
 $ cd misclas/
@@ -36,7 +36,7 @@ $ ./autogen.sh
 ```
 Then, the program `misclas` will be generated in directory `misclas`.
 
-Alternatively, misclas can also be builded from released package `misclas_${VERSION}.tar.gz` from `https://github.com/zhuxiao/misclas/releases`:
+Alternatively, misclas can also be built using the released package `misclas_${VERSION}.tar.gz` from `https://github.com/zhuxiao/misclas/releases`:
 ```sh
 $ tar zxvf misclas_${VERSION}.tar.gz
 $ cd misclas_${VERSION}/
