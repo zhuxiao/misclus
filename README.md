@@ -120,21 +120,21 @@ The scripts in directory `script` can be used to extract regions used for misCla
 * `filterOverlapReg.py`: filter out the overlapped regions in extracted region file;
 * `generateRandReg.py`: randomly select certain number of regions from the extracted region file;
 
-Furthermore, the extracting commands for QUAST, Misasm, Pilon, REAPR and misFinder are as below:
+Furthermore, the examples for the misassembly detection results for QUAST, Misasm, Pilon, REAPR and misFinder can be downloaded at "https://github.com/zhuxiao/results_misclas/tree/origin/Ecoli_real/misassembly_detection", and the misassembly region extract commands for these tools are as below:
 
-* QUAST:
+* QUAST
 ```sh
 $ extractQUASTreg.py misassemblies_QUAST misReg_QUAST
 ```
 Then, the extracted misassembly regions for QUAST will be saved in the `misReg_QUAST` file.
 
-* Misasm:
+* Misasm
 ```sh
 $ cat genome_Indel genome_Misjoin | awk '{split($1,a,":"); split(a[2],b,"-"); print a[1]"\t"b[1]"\t"b[2]}' > misReg_Misasm
 ```
 Then, the extracted misassembly regions for Misasm will be saved in the `misReg_Misasm` file.
 
-* Pilon:
+* Pilon
 ```sh
 $ cat misassemblies_Pilon | grep "fix" | grep ":" | cut -d ":" -f 2,3 | awk '{split($1,a,":");split(a[2],b,"-");print a[1]"\t"b[1]"\t"b[2]}' > misReg_Pilon
 ```
