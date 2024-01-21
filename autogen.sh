@@ -1,4 +1,7 @@
 #!/bin/sh
+	if [ ! -d "bin" ]; then
+		mkdir bin
+	fi
 	cd src/
 	libtoolize
 	aclocal
@@ -8,6 +11,6 @@
 	autoconf
 	./configure
 	make
-	mv -f misclas ../bin
+	make mostlyclean-compile
+	mv -f misclus ../bin
 	cd ../
-	ln -f -s $PWD/bin/misclas.py $PWD/misclas
