@@ -168,7 +168,7 @@ int Paras::parseParas(int argc, char **argv){
 	minStrandRatio = MIN_STRAND_RATIO;//s
 	minisizeRatio = MIN_SIZE_RATIO;//
 	isizeSdevFold = ISIZE_DEV_FOLD;//
-	minmateradio = MIN_MATE_RATIO;//
+	minmateRadio = MIN_MATE_RATIO;//
 	random_norm_reg_percent = RAND_NORM_REG_PERCENT;//
 	threadNum_tmp = NUM_THREADS_PER_WORK;
 
@@ -320,7 +320,7 @@ int Paras::parse_long_opt(int32_t option_index, const char *optarg, const struct
 	}else if(opt_name_str.compare("min-abisize-ratio")==0){ //
 		minisizeRatio = stod(optarg);
 	}else if(opt_name_str.compare("min-abmate-ratio")==0){ //min-abmate-ratio
-		minmateradio = stoi(optarg);
+		minmateRadio = stoi(optarg);
 	}else if(opt_name_str.compare("norm-reg-percent")==0){ //norm-reg-percent
 		random_norm_reg_percent = stod(optarg);
 	}else if(opt_name_str.compare("isize-sdev-fold")==0){ //
@@ -464,7 +464,7 @@ void Paras::outputParas(){
 	}
 	if(abmate_flag){
 		cout << "Abnormal mate read pair clustering: on" << endl;
-		cout << "Maximal ratio for abnormal mate read pair clumps: " << minmateradio << endl;
+		cout << "Maximal ratio for abnormal mate read pair clumps: " << minmateRadio << endl;
 	}
 }
 

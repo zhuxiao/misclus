@@ -27,29 +27,28 @@ struct sortflag{
 class miswork {
 public:
 
+	Paras *paras;
+
 	indicators scores = {0};
 
 	vector<region> abmate, abstrand, abisize;//mark clump
 	vector<bam1_t*> alnDataVec;//data_loader.lodataAlndata-358
 	Base *basearr;
-//	int64_t reg_id;
 	region reg, evareg;
-//	int blankregion, sum, count, nindel, basecov;
-//	double *abReadsRatio;
-//	double covscore=0, indelscore=0, minLocov;
-	int64_t startPos_tmp =0;
-//	double meaninsertsize;
-	double mininsertsize, maxinsertsize, meancov, mincov, maxcov,chimeriCoef=1, randomCoef = 0.2;
-//	uint64_t sequence_num; // nothing used
-	float exRegFold = 2, minCovFold = 0.5, maxCovFold = 2, minLocRatio = 0.2, minStrandRatio = 0.3, minisizeRatio = 0.3, IsizeSdevFold = 3, minMateRatio = 0.3;
 	faidx_t *fai;
-	string bamFile;//regionfile
 
-	miswork(region &r1, region &r2, faidx_t *fai, string bamFile);
+	float chimeriCoef;
+
+	double mininsertsize, maxinsertsize;
+
+//	float exRegFold, minCovFold, maxCovFold, minLocRatio, minStrandRatio, minisizeRatio, IsizeSdevFold, minMateRatio;
+//	string bamFile;
+	double meancov, mincov, maxcov;
+
+	miswork(region &r1, region &r2, faidx_t *fai, Paras *paras, double mininsertsize, double maxinsertsize);
 	virtual ~miswork();
 
 	void getindicator();
-//	indicators getindicator();
 	void preData(region &r);
 	void clearData();
 	double *getabreadsreatio(region &r);//change the *

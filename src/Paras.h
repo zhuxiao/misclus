@@ -30,8 +30,6 @@ using namespace std;
 
 #define OUT_DIR						"output"
 
-
-
 #define SIZE_EST_OP					0
 #define NUM_EST_OP					1
 #define SNV_EST_OP					2
@@ -92,7 +90,7 @@ class Paras
 		string outDir;
 		string regionFile;
 		int minRegsize;
-		double exRegFold , minmateradio;
+		double exRegFold , minmateRadio;
 		double minCovFold, maxCovFold, minLocRatio, minStrandRatio, minisizeRatio, isizeSdevFold;
 		bool cov_flag, indel_flag, abstrand_flag, abisize_flag, abmate_flag;
 		double random_norm_reg_percent;

@@ -7,5 +7,5 @@ nobase_include_HEADERS=*.h
 
 bin_PROGRAMS=misclus
 misclus_SOURCES=alnDataLoader.cpp Base.cpp Block.cpp covLoader.cpp InsertSizeEst.cpp util_header.cpp
-misclus_SOURCES+=events.cpp Paras.cpp misclus_main.cpp util.cpp RefSeqLoader.cpp Evaluate.cpp miswork.cpp
+misclus_SOURCES+=events.cpp Paras.cpp misclus_main.cpp util.cpp RefSeqLoader.cpp misCluster.cpp miswork.cpp
 misclus_CXXFLAGS=$(AM_CXXFLAGS)

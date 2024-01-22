@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([misClus], [0.1.0], [1668191303@qq.com])
+AC_INIT([misClus], [0.5.0], [1668191303@qq.com])
 AM_INIT_AUTOMAKE([-Wportability])
 AC_CONFIG_SRCDIR([Paras.cpp])
 AC_CONFIG_HEADERS([config.h])
