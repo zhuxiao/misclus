@@ -4,9 +4,7 @@ Misassembly clustering based on paired-end reads
 ----------
 misClus is a tool that aims to cluster the misassembly regions using paired-end reads data. It analyzes the signals from the given regions to determine whether the intervals include assembly errors.
 
-For more detailed misclus experimental information, please refer to [zhuxiao/misclus-experiments](https://github.com/zhuxiao).
-
-
+For more detailed misclus experimental information, please refer to [misclus-experiments](https://github.com/zhuxiao/misclus-experiments)
 
 ## Prerequisites ##
 misClus depends on the following libraries and tools:
