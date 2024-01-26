@@ -9,11 +9,11 @@
 using namespace std;
 
 int main(int argc,char **argv){
+	Time time;
 
 	Paras *para = new Paras(argc, argv);
-
 	misCluster mis_cluster(para);
-
+	time.setStartTime();
 	cout << "Feature extraction ..." << endl;
 	mis_cluster.extracfeature();
 
@@ -24,7 +24,7 @@ int main(int argc,char **argv){
 	mis_cluster.analysfile();
 
 	cout << "All works are completed." << endl;
-
+	time.printOverallElapsedTime();
 	delete para;
 
 	return 0;

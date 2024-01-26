@@ -37,8 +37,6 @@ void miswork::getindicator(){
 		}
 	}//if(count == 0
 	if(count == 0){//	minLocov = 0;
-//		cout << "count is :" << count << endl;
-//		meancov = (reg.endPos - reg.startPos)*0.8;
 		meancov = 0;
 	}else{
 		meancov = sum/count;
@@ -49,7 +47,7 @@ void miswork::getindicator(){
 //	cout << "regions.at(s).start :" << regions.at(s).startPos << " regions.at(s).end :" << regions.at(s).endPos << endl;
 
 	for(int64_t i = reg.startPos; i <= reg.endPos; i++){		//basearrd:Base *baseArray = new Base[endPos-startPos+1]();
-		if(basearr[i-startPos_tmp].coverage.idx_RefBase < 4){				//42217  42418
+		if(basearr[i-startPos_tmp].coverage.idx_RefBase < 4){
 			basecov = basearr[i-startPos_tmp].coverage.num_bases[5] + basearr[i - startPos_tmp].del_num_from_del_vec;
 			nindel = basearr[i-startPos_tmp].insVector.size() + basearr[i-startPos_tmp].del_num_from_del_vec;
 			if(basecov > minLocov){
@@ -89,6 +87,7 @@ void miswork::getindicator(){
 //	return NULL;
 }
 void miswork::preData(region &r){
+//	cout << r.chrname << " startPos: " << r.startPos << " endPos: " << r.endPos << endl;
 	covLoader cov_loader(r.chrname, r.startPos, r.endPos, fai);
 	basearr = cov_loader.initBaseArray();
 	alnDataLoader data_loader(r.chrname, r.startPos, r.endPos, paras->inBamFile);

@@ -92,11 +92,21 @@ int covLoader::assignRefBase(Base *baseArray, faidx_t *fai){
 
 // assign base coverage
 void covLoader::generateBaseCoverage(Base *baseArr, vector<bam1_t*> alnDataVector){
+	int32_t i;
 	vector<struct alnSeg*> alnSegs;
 	vector<bam1_t*>::iterator aln;
+	i=1;
 	//string qname;
 	if(alnDataVector.size()>0){
 		bam_type = getBamType(*alnDataVector.begin());
+		if(bam_type == BAM_INVALID){
+			while(bam_type == BAM_INVALID){
+				bam_type = getBamType(alnDataVector.at(i));
+				i++;
+			}
+
+		}
+//			cout << "bam_type: " << bam_type << endl;
 		if(bam_type == BAM_INVALID){
 			cerr << __func__ << ": unknown bam_type, error!" << endl;
 			exit(1);
@@ -385,7 +395,7 @@ int covLoader::getBamType(bam1_t *b){
 		}
 	}
 
-	cout<<"invalid"<<endl;
+//	cout<<"invalid"<<endl;
 	return BAM_INVALID;
 }
 

@@ -185,11 +185,14 @@ void misCluster::getRandRegion(){
 		randomFai = (rand() % (int32_t(0.2*v1.size())));
 		tmp.chrname = v1.at(randomFai).chrname;
 		tmp.startPos = (rand() % (v1.at(randomFai).endPos-20400));
+		if(v1.at(randomFai).endPos-20400<0)
+			cout << v1.at(randomFai).endPos-20400 << endl;
 		tmp.endPos = tmp.startPos + len;
 		if(isRegExist(tmp, regions)) continue;
 		regions.push_back(tmp);
 		evaStart = tmp.startPos - 2*len;
 		evaEnd = tmp.endPos + 2*len;
+
 
 		tmp.startPos = max(one, evaStart);
 		tmp.endPos = min(evaEnd, v1.at(randomFai).endPos);
@@ -237,9 +240,10 @@ void misCluster::extracfeature(){
 	cout << "evaregions.size():" << evaregions.size() << " region.size:" << regions.size() << endl;
 	
 	for(uint64_t i=0; i<evaregions.size(); i++){
-//		if(i<49000){
+//		if(i<45000){
 //			continue;
 //		}
+//		cout << i << endl;
 		mis_work = miswork_vec.at(i);
 
 		miswork_opt = new misWork_opt();

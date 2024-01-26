@@ -451,20 +451,20 @@ void Paras::outputParas(){
 	}
 	if(indel_flag){
 		cout << "Indels clustering: on" << endl;
-		cout << "Ultra-low coverage ratio threshold: " << minLocRatio << endl;
+		cout << "\tUltra-low coverage ratio threshold: " << minLocRatio << endl;
 	}
 	if(abstrand_flag){
 		cout << "Abnormal strand orientation clustering: on" << endl;
-		cout << "Minimal ratio threshold for abnormal strand orientation reads: " << minStrandRatio << endl;
+		cout << "\tMinimal ratio threshold for abnormal strand orientation reads: " << minStrandRatio << endl;
 	}
 	if(abisize_flag){
 		cout << "Abnormal insert size clustering: on" << endl;
 		cout << "Maximal ratio threshold for anomalous insert size clumps: " << minisizeRatio << endl;
-		cout << "Folds of standard deviation for anomalous insert size clumps: " << isizeSdevFold << endl;// need to polish
+		cout << "\tFolds of standard deviation for anomalous insert size clumps: " << isizeSdevFold << endl;// need to polish
 	}
 	if(abmate_flag){
 		cout << "Abnormal mate read pair clustering: on" << endl;
-		cout << "Maximal ratio for abnormal mate read pair clumps: " << minmateRadio << endl;
+		cout << "\tMaximal ratio for abnormal mate read pair clumps: " << minmateRadio << endl;
 	}
 }
 

@@ -37,12 +37,10 @@ public:
 	region reg, evareg;
 	faidx_t *fai;
 
-	float chimeriCoef;
+	double chimeriCoef;
 
 	double mininsertsize, maxinsertsize;
 
-//	float exRegFold, minCovFold, maxCovFold, minLocRatio, minStrandRatio, minisizeRatio, IsizeSdevFold, minMateRatio;
-//	string bamFile;
 	double meancov, mincov, maxcov;
 
 	miswork(region &r1, region &r2, faidx_t *fai, Paras *paras, double mininsertsize, double maxinsertsize);
