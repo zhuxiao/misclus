@@ -4,6 +4,10 @@ Misassembly clustering based on paired-end reads
 ----------
 misClus is a tool that aims to cluster the misassembly regions using paired-end reads data. It analyzes the signals from the given regions to determine whether the intervals include assembly errors.
 
+For more detailed misclus experimental information, please refer to [zhuxiao/misclus-experiments](https://github.com/zhuxiao).
+
+
+
 ## Prerequisites ##
 misClus depends on the following libraries and tools:
 1. [HTSlib(V1.9 or later)](https://github.com/samtools/htslib)
@@ -51,8 +55,8 @@ Then, the program `misclus` will be generated in directory `bin`.
 In addition,misclus can also be built by docker.
 
 ```bash
-$ docker pull misclus_iamges:0.5.0
-$ docker run it --name your_contaniner_name misclus_iamges:0.5.0
+$ docker pull xzhu2/misclus:0.5.0
+$ docker run -it --name your_contaniner_name misclus_iamges:0.5.0
 $ cd /opt/misclus/
 $ ./autogen.sh
 ```
