@@ -11,20 +11,19 @@ misClus depends on the following libraries and tools:
 1. [HTSlib(V1.9 or later)](https://github.com/samtools/htslib)
 2. [mlpack(v3.4.2 or later)](https://github.com/mlpack/mlpack)
 3. g++ (v4.7 or later which supports c++11).
-4. python3
-5. autotools
+4. autotools
 
 ## Quick install ##
 * Debian / Ubuntu 
 ```bash
 $ sudo apt update  # Ensure the package list is up to date
-$ sudo apt install mlpack-bin g++ python3 autoconf automake libtool
+$ sudo apt install mlpack-bin g++ autoconf automake libtool
 ```
 HTSlib needs to be installed from source files.
 
 * RedHat / CentOS
 ```bash
-$ sudo yum install g++ python3 autoconf automake libtool
+$ sudo yum install g++ autoconf automake libtool
 ```
 HTSlib and mlpack need to be installed from source files.
 
