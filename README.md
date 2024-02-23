@@ -23,13 +23,13 @@ HTSlib needs to be installed from source files.
 
 * RedHat / CentOS
 ```bash
-$ sudo yum install g++ autoconf automake libtool
+$ sudo yum install gcc-c++ autoconf automake libtool
 ```
 HTSlib and mlpack need to be installed from source files.
 
 ## Building misClus ##
 
-misclus can be built using the released package `misclus_0.5.0.tar.gz` from `https://github.com/zhuxiao/misclus/releases`:
+misclus can be built using the released package `misclus_0.5.0.tar.xz` from `https://github.com/zhuxiao/misclus/releases`:
 
 ```sh
 $ wget -c https://github.com/zhuxiao/misclus/releases/download/0.5.0/misclus_0.5.0.tar.xz
@@ -44,7 +44,7 @@ Alternatively, misClus can also  be built by typing:
 
 ```sh
 $ git clone https://github.com/zhuxiao/misclus.git
-$ cd misclus/
+$ cd misclus
 $ ./autogen.sh
 ```
 Then, the program `misclus` will be generated in directory `bin`.
@@ -60,13 +60,13 @@ $ ./autogen.sh
 
 Then, the program `misclus` will be generated in directory `bin`
 
-It is recommended to create the symbolic link of the program `misclus` to the `PATH` directories on the machine.
+It is recommended to create the symbolic link of the program `misclus` to the `$PATH` directories on the machine.
 
 ## misClus command ##
 
 Simply，misClus can be run by the command:
 ```sh
-$ misclus regionFile referenceSequence.fa  bamFile.bam  
+$ misclus region.bed assembled.fa sorted.bam  
 ```
 Then, the assembly error regions and normal regions will be output in `misassemblyRegion` file and `normalRegion` file, respectively.
 
@@ -75,13 +75,13 @@ The help information can be shown:
 Program: misclus
 Version: 0.5.0 (using htslib 1.14)
 
-Usage:  misclus [options] <REG_FILE> <REF_FILE> <BAM_FILE>
+Usage:  misclus [options] <REG_FILE> <ASM_FILE> <BAM_FILE>
 
 Description:
    REG_FILE   Region file that need to be processed (required).
               Each region in REG_FILE should be specified in the format
               per line: CHR|CHR:START-END.
-   REF_FILE   Reference file (required)
+   ASM_FILE   assemble squence file (required)
    BAM_FILE   Coordinate-sorted BAM file (required)
 
 Options: 
@@ -134,6 +134,10 @@ Options:
               This option takes effect only if '--ab-mate-off' option is not specified.
    -v         show version information
    -h         show this help message and exit
+   
+Example:
+	# run the clustering to judge the aseemble errors.
+	$ $ misclus region.bed assembled.fa sorted.bam   
 ```
 
 ## Misassembly region extraction scripts ##
