@@ -68,7 +68,7 @@ Simply，misClus can be run by the command:
 ```sh
 $ misclus region.bed assembled.fa sorted.bam  
 ```
-Then, the assembly error regions and normal regions will be output in `misassemblyRegion` file and `normalRegion` file, respectively.
+Then, the assembly error regions and normal regions will be output in `final_result` file, respectively.
 
 The help information can be shown:
 ```sh
@@ -142,9 +142,9 @@ Example:
 
 ## Misassembly region extraction scripts ##
 The scripts in directory `script` can be used to extract regions used for misClus, the function of these scripts as below:
-* `extractQuastReg.py`: extract misassembly regions from the results of QUAST;
-* `filterOverlapReg.py`: filter out the overlapped regions in extracted region file;
-* `generateRandReg.py`: randomly select certain number of regions from the extracted region file;
+1. `extractQuastReg.py`: extract misassembly regions from the results of QUAST;
+2. `filterOverlapReg.py`: filter out the overlapped regions in extracted region file;
+3. `generateRandReg.py`: randomly select certain number of regions from the extracted region file;
 
 Furthermore, the examples for the misassembly detection results for QUAST, Misasm, Pilon, REAPR and misFinder can be downloaded at "https://github.com/zhuxiao/misclus-experiments/tree/origin/Ecoli_real/misassembly_detection", and the misassembly region extraction commands for these tools are as below:
 
