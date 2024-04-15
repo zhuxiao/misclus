@@ -22,7 +22,7 @@ Options:
 if(sys.argv.count('-h') or sys.argv.count('-help') or len(sys.argv)<=1):
     printHelp()
 
-ranNum = 100
+ranNum = 200
 if(sys.argv.count("-n")):
     with open(sys.argv[3]) as f:
         reg = f.readlines()
@@ -30,15 +30,19 @@ if(sys.argv.count("-n")):
         output = open(sys.argv[4],'w+')
 else: 
     with open(sys.argv[1], 'r') as f:
+        next(f)
         reg = f.readlines()
         output = open(sys.argv[2],'w+')
 
-output.write("#scaffold\tstartPos\tendPos\n")
+output.write("scaffold\tstartPos\tendPos\n")
 
 num = 0
 tmp = reg[0].split("\t")
 vec = []
 for i in reg:
+    tmplist = i.split()
+    if len(tmplist) != 4:
+        continue
     if tmp[0] == i.split("\t")[0]:
         vec.append(i)
     else:

@@ -25,7 +25,6 @@ if(len(sys.argv)!=4):
     printHelp()
 
 with open(sys.argv[1], 'r') as finreg:
-    next(finreg)
     reg = finreg.read().splitlines()
 with open(sys.argv[2], 'r') as fai:
     scaffold = fai.read().splitlines()
@@ -33,12 +32,13 @@ with open(sys.argv[2], 'r') as fai:
 output = open(sys.argv[3],'w+')
 reglist = []
 scaffoldend = []
-output.write("#scaffold\tstartPos\tendPos")
+output.write("scaffold\tstartPos\tendPos")
 for i in reg:
     tmplist = i.split()
-    int(tmplist[1])
-    int(tmplist[2])
-    reglist.append(tmplist)
+    if len(tmplist) == 3:
+        int(tmplist[1])
+        int(tmplist[2])
+        reglist.append(tmplist)
 for i in scaffold:
     tmplist = i.split()
     int(tmplist[1])
@@ -50,5 +50,5 @@ for i in reglist:
             break
     if(int(i[1]) > 1000 and int(i[2]) < int(j[1])-1000):
         output.write("\n"+i[0]+"\t"+i[1]+"\t"+i[2])
-
+output.write("\n")
 output.close()
