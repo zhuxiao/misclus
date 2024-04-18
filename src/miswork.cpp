@@ -30,7 +30,7 @@ void miswork::getindicator(){
 	double covscore=0, indelscore=0, minLocov;
 	count = 0;
 	int64_t startPos_tmp = evareg.startPos;//
-	for(int64_t i=reg.startPos; i<=reg.endPos; i++){ //int64_64
+	for(int64_t i=evareg.startPos; i<=evareg.endPos; i++){ //int64_64
 		if(basearr[i-startPos_tmp].coverage.idx_RefBase<4){
 			sum = basearr[i-startPos_tmp].coverage.num_bases[5] + sum;
 			count++;
@@ -46,7 +46,7 @@ void miswork::getindicator(){
 	minLocov = meancov * paras->minLocRatio;
 //	cout << "regions.at(s).start :" << regions.at(s).startPos << " regions.at(s).end :" << regions.at(s).endPos << endl;
 
-	for(int64_t i = reg.startPos; i <= reg.endPos; i++){		//basearrd:Base *baseArray = new Base[endPos-startPos+1]();
+	for(int64_t i = evareg.startPos; i <= evareg.endPos; i++){		//basearrd:Base *baseArray = new Base[endPos-startPos+1]();
 		if(basearr[i-startPos_tmp].coverage.idx_RefBase < 4){
 			basecov = basearr[i-startPos_tmp].coverage.num_bases[5] + basearr[i - startPos_tmp].del_num_from_del_vec;
 			nindel = basearr[i-startPos_tmp].insVector.size() + basearr[i-startPos_tmp].del_num_from_del_vec;
@@ -58,7 +58,7 @@ void miswork::getindicator(){
 	}
 //	cout << "evaregions.at(s)start :" << evaregions.at(s).startPos << " evaregions.at(s)end :" << evaregions.at(s).endPos << endl;
 
-	for(int64_t i= evareg.startPos; i <= evareg.endPos; i++){  //41815 42820
+	for(int64_t i= reg.startPos; i <= reg.endPos; i++){
 //		cout << basearr[i-regions.at(s).startPos] << endl；
 		if(basearr[i-startPos_tmp].coverage.idx_RefBase < 4){
 			basecov = basearr[i-startPos_tmp].coverage.num_bases[5];
@@ -70,8 +70,8 @@ void miswork::getindicator(){
 			blankregion++;
 	}
 	abReadsRatio = getabreadsreatio(evareg);
-	if(blankregion < (evareg.endPos -evareg.startPos+1)){
-		tmp.covscore[0] = chimeriCoef * (covscore)/(evareg.endPos - evareg.startPos - blankregion + 1);
+	if(blankregion < (reg.endPos -reg.startPos+1)){
+		tmp.covscore[0] = chimeriCoef * (covscore)/(reg.endPos - reg.startPos - blankregion + 1);
 	}else{
 		tmp.covscore[0] = 0;
 	}

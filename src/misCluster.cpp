@@ -169,14 +169,15 @@ bool misCluster::isRegExist(region &reg, vector <region> &vec){
 
 void misCluster::getRandRegion(){
 	region tmp;
-	int32_t len, randomFai, randomNum;
+	int32_t len, randomFai, randomNum, end_skipsize;
 	int64_t one, evaStart, evaEnd;
 	vector <region> v1;
-
-	len = evaregions.at(0).endPos - evaregions.at(0).startPos + 1;
+//	int32_t contig_len;
+	len = regions.at(0).endPos - regions.at(0).startPos + 1;
 	randomNum = int32_t(randomCoef*regions.size());
 	one = 1;
 
+	end_skipsize = 2000;
 	v1 = fairegion;
 	sort(v1.begin(), v1.end(), compareContigLen);
 	//srand(time(NULL));
@@ -184,15 +185,16 @@ void misCluster::getRandRegion(){
 	for(int32_t i=0; i<randomNum; ){
 		randomFai = (rand() % (int32_t(0.2*v1.size())));
 		tmp.chrname = v1.at(randomFai).chrname;
-		tmp.startPos = (rand() % (v1.at(randomFai).endPos-20400));
-		if(v1.at(randomFai).endPos-20400<0)
-			cout << v1.at(randomFai).endPos-20400 << endl;
+		if(v1.at(randomFai).endPos <= 3*end_skipsize) break;
+		tmp.startPos = (rand() % (v1.at(randomFai).endPos- 2*end_skipsize));//20400? or V1.at(V1.size() * percent).endPos
+//		if(v1.at(randomFai).endPos-20400<0)
+//			cout << v1.at(randomFai).endPos-20400 << endl;//contig_length < num
+		tmp.startPos += end_skipsize;//startPos and endPos caculate this random num to stat away from paired ends of the scaffolds
 		tmp.endPos = tmp.startPos + len;
-		if(isRegExist(tmp, regions)) continue;
+		if(isRegExist(tmp, evaregions)) continue;
 		regions.push_back(tmp);
 		evaStart = tmp.startPos - 2*len;
 		evaEnd = tmp.endPos + 2*len;
-
 
 		tmp.startPos = max(one, evaStart);
 		tmp.endPos = min(evaEnd, v1.at(randomFai).endPos);
@@ -472,14 +474,14 @@ void misCluster::analysfile(){
 
 	if (abmateflag){
 		abmateCluster = formatfile(mate_cluster_filename);
-		titleline += "\tabisize";
+		titleline += "\tabmate";
 	}
 
 	if(covflag) titleline += "\tcovMark";
 	if(indelflag) titleline += "\tindelMark";
 	if(abstrandflag) titleline += "\tabstrandMark";
 	if(abisizeflag) titleline += "\tabisizeMark";
-	if (abmateflag) titleline += "\tabisizeMark";
+	if (abmateflag) titleline += "\tabmateMark";
 
 	titleline += "\tregionMark";
 	regionClusterDetail << titleline << endl ;
