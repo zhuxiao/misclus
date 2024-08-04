@@ -25,7 +25,7 @@ using namespace std;
 #define MIN_STRAND_RATIO			(0.3f)
 #define MIN_SIZE_RATIO				(0.3f)
 #define ISIZE_DEV_FOLD				3
-#define MIN_MATE_RATIO				(0.5f)
+#define MIN_MATE_RATIO				(0.3f)
 #define RAND_NORM_REG_PERCENT		(0.2f)
 
 #define OUT_DIR						"output"
@@ -92,7 +92,8 @@ class Paras
 		int minRegsize;
 		double exRegFold , minmateRadio;
 		double minCovFold, maxCovFold, minLocRatio, minStrandRatio, minisizeRatio, isizeSdevFold;
-		bool cov_flag, indel_flag, abstrand_flag, abisize_flag, abmate_flag;
+		bool cov_flag, abstrand_flag, abisize_flag, abmate_flag, IDC_flag;
+//		bool indel_flag;
 		double random_norm_reg_percent;
 		string sample;
 		int32_t num_threads;

@@ -22,7 +22,8 @@ using namespace std;
 
 class misCluster{
 	public:
-		bool covflag, indelflag, abstrandflag, abisizeflag, abmateflag;
+		bool covflag, abstrandflag, abisizeflag, abmateflag, IDCflag;
+//		bool indelflag;
 		int32_t minRegsize, num_threads;
 //		double exRegFold, minCovFold, maxCovFold, minLocRatio, minStrandRatio, minisizeRatio, IsizeSdevFold, minMateRatio;
 		double exRegFold, IsizeSdevFold;
@@ -32,8 +33,9 @@ class misCluster{
 		string strand_filename = "strand.csv";
 		string insert_filename = "insert.csv";
 		string mate_filename = "mate.csv";
+		string IDC_filename = "IDC.csv";
 
-		string cov_cluster_filename, indel_cluster_filename, strand_cluster_filename, insert_cluster_filename, mate_cluster_filename;
+		string cov_cluster_filename, indel_cluster_filename, strand_cluster_filename, insert_cluster_filename, mate_cluster_filename, IDC_cluster_filename;
 		string cluster_stat_filename, cluster_detail_filename;
 		string final_result_filename;
 

@@ -24,11 +24,19 @@ miswork::~miswork() {
 
 void miswork::getindicator(){
 	preData(evareg);//
+
+	int64_t near;
+//	bool indelflag = true;
 	indicators tmp;//miswork.tmp
-	int blankregion=0, sum=0, count=0, nindel, basecov;
+	int blankregion=0, sum=0, count=0, nindel, basecov, baseclipping;
+//	int tmp_basecov;
 	double *abReadsRatio;//
-	double covscore=0, indelscore=0, minLocov;
+//	double noromalcov;
+	double covscore=0, minLocov, IDCscore;
+//	double indelscore;
 	count = 0;
+	basecov = 0;
+//	a = 0;
 	int64_t startPos_tmp = evareg.startPos;//
 	for(int64_t i=evareg.startPos; i<=evareg.endPos; i++){ //int64_64
 		if(basearr[i-startPos_tmp].coverage.idx_RefBase<4){
@@ -44,19 +52,50 @@ void miswork::getindicator(){
 	mincov = meancov * paras->minCovFold;
 	maxcov = meancov * paras->maxCovFold;
 	minLocov = meancov * paras->minLocRatio;
+	IDCscore = 0.000001;
 //	cout << "regions.at(s).start :" << regions.at(s).startPos << " regions.at(s).end :" << regions.at(s).endPos << endl;
 
-	for(int64_t i = evareg.startPos; i <= evareg.endPos; i++){		//basearrd:Base *baseArray = new Base[endPos-startPos+1]();
+//	for(int64_t i = reg.startPos; i <= reg.endPos; i++){		//indel -score
+//		if(basearr[i-startPos_tmp].coverage.idx_RefBase < 4){
+//			nindel = basearr[i-startPos_tmp].insVector.size() + basearr[i-startPos_tmp].del_num_from_del_vec;
+//			if(basecov > minLocov){
+//				if(indelscore < double(nindel)/basecov){
+//					indelscore = double(nindel)/basecov;
+//					tmp_basecov = basecov;
+//				}
+//			}
+//		}
+//	}
+
+//	maxindel = (evareg.startPos + evareg.endPos)/2;
+//	tmp_start = maxindel - 25;//middle
+//	tmp_end = maxindel + 25;
+
+	for(int64_t i = reg.startPos; i <= reg.endPos; i++){
 		if(basearr[i-startPos_tmp].coverage.idx_RefBase < 4){
-			basecov = basearr[i-startPos_tmp].coverage.num_bases[5] + basearr[i - startPos_tmp].del_num_from_del_vec;
+			baseclipping = basearr[i-startPos_tmp].clipVector.size();
+			near = 0;
+			while(near < 5){
+				near++;
+				baseclipping += basearr[i - startPos_tmp + near].clipVector.size();
+				baseclipping += basearr[i - startPos_tmp - near].clipVector.size();
+			}
 			nindel = basearr[i-startPos_tmp].insVector.size() + basearr[i-startPos_tmp].del_num_from_del_vec;
+			basecov = basearr[i-startPos_tmp].coverage.num_bases[5] + basearr[i - startPos_tmp].del_num_from_del_vec + baseclipping;
 			if(basecov > minLocov){
-				if(indelscore < double(nindel)/basecov)
-					indelscore = double(nindel)/basecov;
+				if(IDCscore < double(baseclipping + nindel)/(basecov)){
+//					cout << "clipping numbers: " << baseclipping << "indel numbers: " << nindel ; //gdb test sequence
+					IDCscore = double(baseclipping + nindel ) / (basecov);
+//					tmp_basecov = basecov;
+				}
 			}
 		}
 	}
+
+
+
 //	cout << "evaregions.at(s)start :" << evaregions.at(s).startPos << " evaregions.at(s)end :" << evaregions.at(s).endPos << endl;
+
 
 	for(int64_t i= reg.startPos; i <= reg.endPos; i++){
 //		cout << basearr[i-regions.at(s).startPos] << endl；
@@ -69,13 +108,34 @@ void miswork::getindicator(){
 		}else
 			blankregion++;
 	}
+
+//	if(indelscore > 0.28 and indelscore < 0.5){
+//		for (int64_t i = tmp_start; i <= tmp_end; i++) {//
+//		    if (basearr[i - startPos_tmp].coverage.idx_RefBase < 4) {
+//		        tmp_cov = basearr[i - startPos_tmp].coverage.num_bases[5] + basearr[i - startPos_tmp].del_num_from_del_vec;
+//		        totalcount += tmp_cov;
+//		        // static  match number of scaffolds
+//		        if (tmp_cov > mincov && tmp_cov < maxcov)
+//		            normalcount += basearr[i - startPos_tmp].coverage.num_bases[basearr[i - startPos_tmp].coverage.idx_RefBase];
+//
+//		    }
+//		}
+//		if(totalcount != 0)
+//			noromalcov = (double)normalcount / totalcount ;
+//		else
+//			noromalcov = 0;
+//		if(noromalcov < 0.75 or tmp_basecov < 0.5 * meancov or tmp_basecov > 1.5 * meancov)//set it as options?
+//			tmp.indelscore[0] = 0.99;
+//			//indelflag = true;
+//	}
+
 	abReadsRatio = getabreadsreatio(evareg);
-	if(blankregion < (reg.endPos -reg.startPos+1)){
+	if(blankregion < (reg.endPos -reg.startPos+1)){//
 		tmp.covscore[0] = chimeriCoef * (covscore)/(reg.endPos - reg.startPos - blankregion + 1);
 	}else{
 		tmp.covscore[0] = 0;
 	}
-	tmp.indelscore[0] = indelscore;
+	tmp.IDCscore= IDCscore;
 	tmp.matescore = abReadsRatio[0];
 	tmp.strandscore = abReadsRatio[1];
 	tmp.insertscore = abReadsRatio[2];

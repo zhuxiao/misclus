@@ -14,7 +14,7 @@ struct warnregion{
 	long int startaln, endaln;
 };
 struct indicators{//
-	double covscore[3], indelscore[3], clipscore, insertscore, strandscore, matescore;
+	double covscore[3], indelscore[3], IDCscore, insertscore, strandscore, matescore;
 };
 struct kind{
 	int flag[7] = {0, 0, 0, 0, 0, 0, 0};

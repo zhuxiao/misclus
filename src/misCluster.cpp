@@ -45,12 +45,14 @@ void misCluster::init(){
 	strand_filename = feature_path +"/" + strand_filename;
 	insert_filename = feature_path +"/" + insert_filename;
 	mate_filename = feature_path +"/" + mate_filename;
+	IDC_filename = feature_path +"/" + IDC_filename;
 
 	cov_cluster_filename = cluster_path + "/"+ "cluster_cov.csv";
 	indel_cluster_filename = cluster_path + "/" + "cluster_indel.csv";
 	strand_cluster_filename = cluster_path + "/" + "cluster_strand.csv";
 	insert_cluster_filename = cluster_path + "/" + "cluster_insert.csv";
 	mate_cluster_filename = cluster_path + "/" + "cluster_mate.csv";
+	IDC_cluster_filename = cluster_path + "/" + "cluster_IDC.csv";
 	cluster_stat_filename = cluster_path + "/" + "cluster_stat";
 	cluster_detail_filename = cluster_path + "/" + "cluster_detail";
 
@@ -60,7 +62,9 @@ void misCluster::init(){
 	covflag = paras->cov_flag;
 //	minCovFold = paras->minCovFold;
 //	maxCovFold = paras->maxCovFold;
-	indelflag = paras->indel_flag;
+
+//	indelflag = paras->indel_flag;
+
 //	minLocRatio = paras->minLocRatio;
 	abstrandflag = paras->abstrand_flag;
 //	minStrandRatio = paras->minStrandRatio;
@@ -69,6 +73,9 @@ void misCluster::init(){
 	IsizeSdevFold = paras ->isizeSdevFold;
 	abmateflag = paras->abmate_flag;
 //	minMateRatio = paras->minmateRadio;
+
+//	clippingflag = paras->clippingflag;  change the paras -options
+	IDCflag = paras->IDC_flag;
 
 }
 void misCluster::getinregion(string &filename){
@@ -183,12 +190,10 @@ void misCluster::getRandRegion(){
 	//srand(time(NULL));
 
 	for(int32_t i=0; i<randomNum; ){
-		randomFai = (rand() % (int32_t(0.2*v1.size())));
+		randomFai = (rand() % (int32_t(2 + 0.2*v1.size())));
 		tmp.chrname = v1.at(randomFai).chrname;
 		if(v1.at(randomFai).endPos <= 3*end_skipsize) break;
 		tmp.startPos = (rand() % (v1.at(randomFai).endPos- 2*end_skipsize));//20400? or V1.at(V1.size() * percent).endPos
-//		if(v1.at(randomFai).endPos-20400<0)
-//			cout << v1.at(randomFai).endPos-20400 << endl;//contig_length < num
 		tmp.startPos += end_skipsize;//startPos and endPos caculate this random num to stat away from paired ends of the scaffolds
 		tmp.endPos = tmp.startPos + len;
 		if(isRegExist(tmp, evaregions)) continue;
@@ -198,6 +203,7 @@ void misCluster::getRandRegion(){
 
 		tmp.startPos = max(one, evaStart);
 		tmp.endPos = min(evaEnd, v1.at(randomFai).endPos);
+		tmp.chrlen = getChrLen(tmp.chrname);//0713 add random tmpChr_len
 		evaregions.push_back(tmp);
 		i++;
 	}
@@ -298,17 +304,17 @@ void misCluster::outputfile(){
 			out_file << setprecision(2) << miswork_vec[i]->scores.covscore[0] << endl;
 		out_file.close();
 	}
-	if(indelflag){
-		out_file.open(indel_filename);
-		if(!out_file.is_open()) {
-			cerr << "cannot create file '" << indel_filename << "', error!" << endl;
-			exit(1);
-		}
-		for(i=0; i<miswork_vec.size(); i++)
-			out_file << setprecision(2) << miswork_vec[i]->scores.indelscore[0] << endl;
-		out_file.close();
-	}
-	
+//	if(indelflag){
+//		out_file.open(indel_filename);
+//		if(!out_file.is_open()) {
+//			cerr << "cannot create file '" << indel_filename << "', error!" << endl;
+//			exit(1);
+//		}
+//		for(i=0; i<miswork_vec.size(); i++)
+//			out_file << setprecision(2) << miswork_vec[i]->scores.indelscore[0] << endl;
+//		out_file.close();
+//	}
+//
 	if(abstrandflag){
 		out_file.open(strand_filename);
 		if(!out_file.is_open()) {
@@ -341,36 +347,51 @@ void misCluster::outputfile(){
 			out_file << setprecision(2) << miswork_vec[i]->scores.matescore << endl;
 		out_file.close();
 	}
+	if (IDCflag) {
+		out_file.open(IDC_filename);
+		if(!out_file.is_open()) {
+			cerr << "cannot create file '" << IDC_filename << "', error!" << endl;
+			exit(1);
+		}
+		for(i=0; i<miswork_vec.size(); i++)
+			out_file << setprecision(2) << miswork_vec[i]->scores.IDCscore << endl;
+		out_file.close();
+	}
 }
 
 void misCluster::clusterfile(){
 	string cmd;
 
 	if(covflag){
-		cmd = "mlpack_kmeans -c 2 -i " + cov_filename + " -o " + cov_cluster_filename ;
+		cmd = "mlpack_kmeans -c 2 -i " + cov_filename + " -o " + cov_cluster_filename;//if (data_number <1000 10000)?
 //		cout << cmd << endl;
 		system(cmd.c_str());
 	}
 
-	if(indelflag){
-		cmd = "mlpack_kmeans -c 2 -i " + indel_filename + " -o " + indel_cluster_filename ;
-//		cout << cmd << endl;
-		system(cmd.c_str());
-	}
+//	if(indelflag){
+//		cmd = "mlpack_kmeans -c 2 -i " + indel_filename + " -o " + indel_cluster_filename;
+////		cout << cmd << endl;
+//		system(cmd.c_str());
+//	}
 
 	if(abstrandflag){
-		cmd = "mlpack_kmeans -c 2 -i " + strand_filename + " -o " + strand_cluster_filename ;
+		cmd = "mlpack_kmeans -c 2 -i " + strand_filename + " -o " + strand_cluster_filename;
 //		cout << cmd << endl;
 		system(cmd.c_str());
 	}
 
 	if(abisizeflag){
-		cmd = "mlpack_kmeans -c 2 -i " + insert_filename + " -o " + insert_cluster_filename ;
+		cmd = "mlpack_kmeans -c 2 -i " + insert_filename + " -o " + insert_cluster_filename;
 //		cout << cmd << endl;
 		system(cmd.c_str());
 	}
 	if (abmateflag){
-		cmd = "mlpack_kmeans -c 2 -i " + mate_filename + " -o " + mate_cluster_filename ;
+		cmd = "mlpack_kmeans -c 2 -i " + mate_filename + " -o " + mate_cluster_filename;
+//		cout << cmd << endl;
+		system(cmd.c_str());
+	}
+	if (IDCflag){
+		cmd = "mlpack_kmeans -c 2 -i " + IDC_filename + " -o " + IDC_cluster_filename;
 //		cout << cmd << endl;
 		system(cmd.c_str());
 	}
@@ -420,7 +441,7 @@ void misCluster::analysfile(){
 	vector<double> last;
 	vector<string> region, regsplit, tone;
 	vector<vector<string>> regVec;
-	vector<vector<double>> covCluster, indelCluster, abstrandCluster, abisizeCluster, abmateCluster;  //restore
+	vector<vector<double>> covCluster, indelCluster, abstrandCluster, abisizeCluster, abmateCluster, clippingCluster;  //restore
 	double last_1;
 	size_t i;
 
@@ -456,10 +477,14 @@ void misCluster::analysfile(){
 		titleline += "\tcov";
 	}
 
+//	if(indelflag){
+//		indelCluster = formatfile(indel_cluster_filename);
+//		titleline += "\tindel";
+//	}
 
-	if(indelflag){
-		indelCluster = formatfile(indel_cluster_filename);
-		titleline += "\tindel";
+	if (IDCflag){
+		clippingCluster = formatfile(IDC_cluster_filename);
+		titleline += "\tIDC";
 	}
 
 	if(abstrandflag){
@@ -478,7 +503,8 @@ void misCluster::analysfile(){
 	}
 
 	if(covflag) titleline += "\tcovMark";
-	if(indelflag) titleline += "\tindelMark";
+//	if(indelflag) titleline += "\tindelMark";
+	if(IDCflag) titleline += "\tIDCMark";
 	if(abstrandflag) titleline += "\tabstrandMark";
 	if(abisizeflag) titleline += "\tabisizeMark";
 	if (abmateflag) titleline += "\tabmateMark";
@@ -494,9 +520,18 @@ void misCluster::analysfile(){
 			linei = linei + '\t' + to_string(covCluster[i][0]);
 		}
 
-		if(indelflag){
-			last_1 += indelCluster[i][1];
-			linei = linei + '\t' + to_string(indelCluster[i][0]);
+//		if(indelflag){
+//			if(indelCluster[i][0] < 0.49 and indelCluster[i][0] > 0.3) //set indelCluster[i][0] 's threshold, to reduce impact of alleles   if ? (0,0.25 ) (0.25,0.5) (0.5,1) :
+//				indelCluster[i][1] = 0;
+//			last_1 += indelCluster[i][1];
+//			linei = linei + '\t' + to_string(indelCluster[i][0]);
+//		}
+
+		if(IDCflag){
+//			if(clippingCluster[i][0] > 0.2) //set indelCluster[i][0] 's threshold, to reduce impact of alleles   if ? (0,0.25 ) (0.25,0.5) (0.5,1) :
+//				clippingCluster[i][1] = 1;
+			last_1 += clippingCluster[i][1];
+			linei = linei + '\t' + to_string(clippingCluster[i][0]);
 		}
 
 		if(abstrandflag){
@@ -519,8 +554,13 @@ void misCluster::analysfile(){
 			else linei = linei + '\t' + 'N';
 		}
 
-		if(indelflag){
-			if(indelCluster[i][1]!= 0) linei = linei + '\t' + 'P';
+//		if(indelflag){
+//			if(indelCluster[i][1]!= 0) linei = linei + '\t' + 'P';
+//			else linei = linei + '\t' + 'N';
+//		}
+
+		if(IDCflag){
+			if(clippingCluster[i][1]!= 0) linei = linei + '\t' + 'P';
 			else linei = linei + '\t' + 'N';
 		}
 

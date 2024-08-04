@@ -48,7 +48,7 @@ void Paras::init(){
 	isizeSdevFold = 0;
 	random_norm_reg_percent = 0;
 
-	cov_flag = indel_flag = abstrand_flag = abisize_flag = abmate_flag = true;
+	cov_flag = abstrand_flag = abisize_flag = abmate_flag = IDC_flag = true;
 	num_parts_progress = NUM_PARTS_PROGRESS;
 }
 
@@ -174,7 +174,8 @@ int Paras::parseParas(int argc, char **argv){
 
 	static struct option lopts[] = {
 		{ "cov-off", no_argument, NULL, 0 },
-		{ "indel-off", no_argument, NULL, 0 },
+//		{ "indel-off", no_argument, NULL, 0 },
+		{ "IDC-off", no_argument, NULL, 0 },
 		{ "ab-strand-off", no_argument, NULL, 0 },
 		{ "ab-isize-off", no_argument, NULL, 0 },
 		{ "ab-mate-off", no_argument, NULL, 0 },
@@ -296,10 +297,12 @@ int Paras::parse_long_opt(int32_t option_index, const char *optarg, const struct
 		}
 	}else if(opt_name_str.compare("cov-off")==0){ // cov-true
 		cov_flag = false;
-	}else if(opt_name_str.compare("indel-off")==0){ //
-		indel_flag = false;
+//	}else if(opt_name_str.compare("indel-off")==0){ //
+//		indel_flag = false;
 	}else if(opt_name_str.compare("ab-strand-off")==0){ //
 		abstrand_flag = false;
+	}else if(opt_name_str.compare("IDC-off")==0){ //
+		IDC_flag = false;
 	}else if(opt_name_str.compare("ab-isize-off")==0){ //
 		abisize_flag = false;
 	}else if(opt_name_str.compare("ab-mate-off")==0){ //
@@ -399,12 +402,12 @@ void Paras::showUsage(){
 	cout << "      --max-cov-fold DOUBLE" << endl;
 	cout << "              Coverage is anomalous when it is higher than DOUBLE*meancov for an auxiliary region." << "[" << MAX_COV_FOLD << "]" << endl;
 	cout << "              This option takes effect only if '--cov-off' option is not specified." << endl;
-	cout << "   --indel-off  disable the clustering on indel feature" << endl;
+	cout << "   --IDC-off  disable the clustering on IDC feature" << endl;
 	cout << "      --min-locs-ratio DOUBLE" << endl;
 	cout << "              Mask the ultra-low coverage locations whose coverage is lower" << endl;
-	cout << "              than DOUBLE*meancov. When indels appear at ultra-low coverage location," << endl;
-	cout << "              the performance on indels is unreliable." << "[" << MIN_LOCAL_RATIO << "]" << endl;
-	cout << "              This option takes effect only if '--indel-off' option is not specified." << endl;
+	cout << "              than DOUBLE*meancov. When indels and clips appear at ultra-low coverage location," << endl;
+	cout << "              the performance on IDC is unreliable." << "[" << MIN_LOCAL_RATIO << "]" << endl;
+	cout << "              This option takes effect only if '--IDC-off' option is not specified." << endl;
 	cout << "   --ab-strand-off  disable the clustering on anomalous orientation feature" << endl;
 	cout << "      --min-abstrand-ratio DOUBLE" << endl;
 	cout << "              Search the anomalous orientation clumps in which the anomalous" << endl;
@@ -449,10 +452,10 @@ void Paras::outputParas(){
 		cout << "\tMinimal coverage fold to determine normal coverage region: " << minCovFold << endl;
 		cout << "\tMaximal coverage fold to determine normal coverage region: " << maxCovFold << endl;
 	}
-	if(indel_flag){
-		cout << "Indels clustering: on" << endl;
-		cout << "\tUltra-low coverage ratio threshold: " << minLocRatio << endl;
-	}
+//	if(indel_flag){
+//		cout << "Indels clustering: on" << endl;
+//		cout << "\tUltra-low coverage ratio threshold: " << minLocRatio << endl;
+//	}
 	if(abstrand_flag){
 		cout << "Abnormal strand orientation clustering: on" << endl;
 		cout << "\tMinimal ratio threshold for abnormal strand orientation reads: " << minStrandRatio << endl;
@@ -465,6 +468,10 @@ void Paras::outputParas(){
 	if(abmate_flag){
 		cout << "Abnormal mate read pair clustering: on" << endl;
 		cout << "\tMaximal ratio for abnormal mate read pair clumps: " << minmateRadio << endl;
+	}
+	if(IDC_flag){
+		cout << "IDC clustering: on" << endl;
+		cout << "\tUltra-low coverage ratio threshold: " << minLocRatio << endl;
 	}
 }
 

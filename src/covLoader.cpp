@@ -96,7 +96,7 @@ void covLoader::generateBaseCoverage(Base *baseArr, vector<bam1_t*> alnDataVecto
 	vector<struct alnSeg*> alnSegs;
 	vector<bam1_t*>::iterator aln;
 	i=1;
-	//string qname;
+	string qname;
 	if(alnDataVector.size()>0){
 		bam_type = getBamType(*alnDataVector.begin());
 		if(bam_type == BAM_INVALID){
@@ -114,16 +114,18 @@ void covLoader::generateBaseCoverage(Base *baseArr, vector<bam1_t*> alnDataVecto
 
 		for(aln=alnDataVector.begin(); aln!=alnDataVector.end(); aln++)
 			if(!((*aln)->core.flag & BAM_FUNMAP)){ // aligned
-				//qname = bam_get_qname(*aln);
+//				qname = bam_get_qname(*aln);
 				//if(qname.compare("cc7f944e_142691_4447")==0){
-				//	cout << qname << endl;
+//				cout << qname << endl;
 				//}
 				switch(bam_type){
 					case BAM_CIGAR_NO_DIFF_MD:
 						alnSegs = generateAlnSegs(*aln);
+//						cout << "BAM_CIGAR_NO_DIFF" << endl;
 						break;
 					case BAM_CIGAR_DIFF_NO_MD:
 						alnSegs = generateAlnSegsDiff_no_MD(*aln);
+//						cout << "BAM_CIGAR_DIFF" << endl;
 						break;
 				}// generate align segments
 
@@ -533,7 +535,12 @@ int covLoader::updateBaseInfo(Base *baseArr, vector<struct alnSeg*> alnSegs){
 				if((*seg)->startRpos>=startPos and (*seg)->startRpos<=endPos){
 					if((*seg)->startQpos==1) endflag = 0;
 					else endflag = 1;
-					baseArr[(*seg)->startRpos-startPos].addClipEvent(allocateClipEvent((*seg)->startRpos, (*seg)->opflag, endflag, (*seg)->seg_MD));
+//					if((*seg)->startRpos == 1558546)
+//						cout << "(*seg)	clipping: " << (*seg)->opflag << endl ;
+//					else {
+//
+//					}
+					baseArr[(*seg)->startRpos-startPos].addClipEvent(allocateClipEvent((*seg)->startRpos, (*seg)->opflag, endflag, (*seg)->seg_MD));//gdb test
 				}
 				break;
 			case BAM_CREF_SKIP:  // unexpected events
